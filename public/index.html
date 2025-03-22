@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Rotas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <section id="image-part">
+            <img src="rotas.png" alt="Mapa de Rotas">
+        </section>
+        <section id="text-part">
+            <h1>Calculadora de Rotas</h1>
+            <form id="routeForm">
+                <label for="start">Ponto de Partida:</label>
+                <select id="start" name="start">
+                    <option value="A">A</option>
+                    <option value="H">H</option>
+                    <option value="E">E</option>
+                </select>
+
+                <label for="end">Ponto de Entrega:</label>
+                <select id="end" name="end">
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="J">J</option>
+                </select>
+
+                <button type="submit">Calcular Rota</button>
+            </form>
+
+            <div id="result"></div>
+        </section>
+    </div>
+
+    <script>
+        document.getElementById('routeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const start = document.getElementById('start').value;
+            const end = document.getElementById('end').value;
+
+            const response = await fetch(`/calculate?start=${start}&end=${end}`);
+            const data = await response.json();
+
+            const resultDiv = document.getElementById('result');
+            if (data.error) {
+                resultDiv.innerHTML = `<p style="color: red;">${data.error}</p>`;
+            } else {
+                resultDiv.innerHTML = `
+                    <p><strong>De ${data.start} para ${data.end}:</strong></p>
+                    <p>Menor distância: ${data.shortestDistance} km</p>
+                    <p>Melhor percurso: ${data.shortestPath}</p>
+                    <p>Maior distância: ${data.longestDistance} km</p>
+                    <p>Percurso mais longo: ${data.longestPath}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
