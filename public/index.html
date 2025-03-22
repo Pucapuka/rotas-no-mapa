@@ -8,9 +8,12 @@
 </head>
 <body>
     <div class="container">
+        <!-- Seção da Imagem -->
         <section id="image-part">
             <img src="rotas.png" alt="Mapa de Rotas">
         </section>
+
+        <!-- Seção do Texto -->
         <section id="text-part">
             <h1>Calculadora de Rotas</h1>
             <form id="routeForm">
@@ -31,7 +34,9 @@
                 <button type="submit">Calcular Rota</button>
             </form>
 
-            <div id="result"></div>
+            <div id="result">
+                <!-- Resultados serão inseridos aqui -->
+            </div>
         </section>
     </div>
 
@@ -49,13 +54,45 @@
             if (data.error) {
                 resultDiv.innerHTML = `<p style="color: red;">${data.error}</p>`;
             } else {
-                resultDiv.innerHTML = `
+                // Exibir menor e maior distância
+                let resultHtml = `
                     <p><strong>De ${data.start} para ${data.end}:</strong></p>
                     <p>Menor distância: ${data.shortestDistance} km</p>
                     <p>Melhor percurso: ${data.shortestPath}</p>
                     <p>Maior distância: ${data.longestDistance} km</p>
                     <p>Percurso mais longo: ${data.longestPath}</p>
                 `;
+
+                // Exibir todas as rotas em uma tabela
+                resultHtml += '<h2>Todas as Rotas Possíveis:</h2>';
+                resultHtml += `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rota</th>
+                                <th>Caminho</th>
+                                <th>Distância (km)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                data.allRoutes.forEach((route, index) => {
+                    resultHtml += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${route.path}</td>
+                            <td>${route.distance}</td>
+                        </tr>
+                    `;
+                });
+
+                resultHtml += `
+                        </tbody>
+                    </table>
+                `;
+
+                resultDiv.innerHTML = resultHtml;
             }
         });
     </script>

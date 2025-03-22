@@ -50,7 +50,7 @@ function calculateDistance(path) {
 // Rota para servir a página HTML
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rota para calcular as distâncias
+// Rota para calcular as distâncias e rotas
 app.get('/calculate', (req, res) => {
     const start = req.query.start;
     const end = req.query.end;
@@ -78,7 +78,11 @@ app.get('/calculate', (req, res) => {
         shortestDistance: shortestRoute.distance,
         shortestPath: shortestRoute.path.join(' -> '),
         longestDistance: longestRoute.distance,
-        longestPath: longestRoute.path.join(' -> ')
+        longestPath: longestRoute.path.join(' -> '),
+        allRoutes: allRoutes.map(route => ({
+            path: route.path.join(' -> '),
+            distance: route.distance
+        }))
     });
 });
 
